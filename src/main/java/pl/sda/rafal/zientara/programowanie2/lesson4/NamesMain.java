@@ -11,7 +11,7 @@ public class NamesMain {
 
 //        Circle.class.getSimpleName()
         String report = getResultReport(maleNames, femaleNames);
-        saveReportToFile(report);
+       // saveReportToFile(report);
     }
 
     private static void saveReportToFile(String report) {
