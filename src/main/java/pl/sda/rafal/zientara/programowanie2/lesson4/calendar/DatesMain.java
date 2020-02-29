@@ -1,8 +1,7 @@
-package pl.sda.rafal.zientara.programowanie2.lesson4;
+package pl.sda.rafal.zientara.programowanie2.lesson4.calendar;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Set;
 
 public class DatesMain {
 
