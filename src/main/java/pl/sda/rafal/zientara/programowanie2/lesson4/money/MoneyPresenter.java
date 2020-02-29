@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MoneyPresenter implements
         MoneyContract.Presenter {
@@ -18,14 +19,13 @@ public class MoneyPresenter implements
     }
 
     @Override
-    public void initData() {
+    public void prepareData() {
         File file = new File("zakupy.csv");
         try {
             FileReader reader = new FileReader(file);
             BufferedReader buffer = new BufferedReader(reader);
             boolean fistIgnored = false;
             String line = buffer.readLine();
-            line = buffer.readLine();
             while (line != null) {
                 if (!fistIgnored) {
                     fistIgnored = true;
@@ -41,6 +41,11 @@ public class MoneyPresenter implements
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void initData() {
+
         view.refreshList(costs);
     }
 
@@ -58,6 +63,11 @@ public class MoneyPresenter implements
 
     @Override
     public void onWordChange(String word) {
-        //todo
+        List<Cost> result = costs.stream()
+                .filter(cost -> cost.shopName.contains(word))
+                .collect(Collectors.toList());
+
+        view.refreshList(result);
     }
 }
+
