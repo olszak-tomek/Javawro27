@@ -9,7 +9,7 @@ public class MoneyContract {
     }
 
     public interface Presenter {
-        void onWordChange(String word);
         void initData();
+        void onWordChange(String word);
     }
 }
