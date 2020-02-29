@@ -1,6 +1,8 @@
 package pl.sda.rafal.zientara.programowanie2.lesson4.money;
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 
 public class WhereIsMyMoney implements MoneyContract.View {
@@ -21,10 +23,33 @@ public class WhereIsMyMoney implements MoneyContract.View {
         frame.setSize(FIELD_WIDTH + 2 * PADDING, 600);
         frame.setLayout(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        JLabel names = new JLabel("Filter by name");
+        names.setBounds(PADDING, 0, FIELD_WIDTH, FIELD_HEIGHT);
+        frame.add(names);
 
         shopInput = new JTextField();
         shopInput.setBounds(PADDING, PADDING, FIELD_WIDTH, FIELD_HEIGHT);
+        shopInput.addKeyListener((new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                presenter.onWordChange(shopInput.getText());
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        }));
+
         frame.add(shopInput);
+        JLabel fromToDate = new JLabel("Filter by date from to");
+        fromToDate.setBounds(PADDING, 100, FIELD_WIDTH, FIELD_HEIGHT);
+        frame.add(fromToDate);
 
         dateFrom = new JTextField();
         dateFrom.setBounds(PADDING, 150, 75, FIELD_HEIGHT);
@@ -33,6 +58,10 @@ public class WhereIsMyMoney implements MoneyContract.View {
         dateTo = new JTextField();
         dateTo.setBounds(175, 150, 75, FIELD_HEIGHT);
         frame.add(dateTo);
+
+        JLabel fromToCost = new JLabel("Filter by price from to");
+        fromToCost.setBounds(PADDING, 200, FIELD_WIDTH, FIELD_HEIGHT);
+        frame.add(fromToCost);
 
         costFrom = new JTextField();
         costFrom.setBounds(PADDING, 250, 75, FIELD_HEIGHT);
@@ -47,6 +76,7 @@ public class WhereIsMyMoney implements MoneyContract.View {
         frame.add(results);
 
         frame.setVisible(true);
+        presenter.prepareData();
         presenter.initData();
     }
 

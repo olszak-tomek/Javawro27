@@ -7,16 +7,49 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MoneyPresenter implements
         MoneyContract.Presenter {
     private final MoneyContract.View view;
 
     private List<Cost> costs = new ArrayList<>();
+    private List<Cost> lastResult = new ArrayList<>();
+
+    private LocalDate toDate;
+
+    private double fromPrice;
+    private double toPrice;
+    private String word;
+    private LocalDate fromDate;
 
     public MoneyPresenter(MoneyContract.View view) {
         this.view = view;
     }
+
+    private void refreshResults() {
+        Stream<Cost> stream = costs.stream();
+        if (word != null) {
+            stream = stream.filter(cost -> cost.shopName.contains((word)));
+        }
+        if (fromPrice > 0) {
+            stream = stream.filter(cost -> cost.price >= fromPrice);
+        }
+        if(toPrice>0){
+            stream=stream.filter(cost->cost.price<=toPrice);
+        }
+        if (fromDate!=null){
+            stream=stream.filter(cost->!cost.date.isBefore(fromDate));
+        }
+        if (toDate!=null){
+            stream=stream.filter(cost->!cost.date.isAfter(toDate));
+        }
+
+
+        lastResult = stream.collect(Collectors.toList());
+
+    }
+
 
     @Override
     public void prepareData() {
@@ -63,11 +96,48 @@ public class MoneyPresenter implements
 
     @Override
     public void onWordChange(String word) {
-        List<Cost> result = costs.stream()
-                .filter(cost -> cost.shopName.contains(word))
-                .collect(Collectors.toList());
 
-        view.refreshList(result);
+        this.word = word;
+       refreshAndShow();
+    }
+
+    @Override
+    public void onPriceFromChange(double fromPrice) {
+
+        this.fromPrice = fromPrice;
+        refreshAndShow();
+
+    }
+
+    @Override
+    public void onPriceToChange(double toPrice) {
+        this.toPrice = toPrice;
+
+        refreshAndShow();
+
+    }
+
+    private void refreshAndShow() {
+        refreshResults();
+        view.refreshList(lastResult);
+    }
+
+
+    @Override
+    public List<Cost> getLastResult() {
+        return lastResult;
+    }
+
+    @Override
+    public void onFromDateChange(LocalDate fromDate) {
+        this.fromDate = fromDate;
+        refreshAndShow();
+    }
+
+    @Override
+    public void onToDateChange(LocalDate toDate) {
+        this.toDate = toDate;
+        refreshAndShow();
     }
 }
 
