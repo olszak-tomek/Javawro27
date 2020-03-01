@@ -15,13 +15,6 @@ public class Cost {
     }
 
     @Override
-    public String toString() {
-        return "shop='" + shopName + '\'' +
-                " price=" + price +
-                " date=" + date;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -34,5 +27,12 @@ public class Cost {
     @Override
     public int hashCode() {
         return Objects.hash(shopName, price, date);
+    }
+
+    @Override
+    public String toString() {
+        return "shop='" + shopName + '\'' +
+                " price=" + price +
+                " date=" + date;
     }
 }
